@@ -68,13 +68,21 @@ Las demás claves que conviene tocar están en
 ## Comprobar que todo está bien
 
 ```bash
-python scripts/comprobar.py \
-  --skyrim "C:/Program Files (x86)/Steam/steamapps/common/Skyrim Special Edition" \
-  --config "C:/ruta/a/MantellaSoftware/config.ini"
+python scripts/comprobar.py
 ```
 
-Revisa Python, Skyrim, SKSE, los mods requeridos, el `config.ini` y el propio
-gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
+Busca Skyrim y el `config.ini` de Mantella por su cuenta, así que normalmente
+no hace falta darle ninguna ruta. Revisa Python, Skyrim, SKSE, los mods
+requeridos, el `config.ini` y el propio gateway, y marca cada punto como
+`[OK]`, `[AVISO]` o `[FALLO]`.
+
+Si no encuentras la carpeta de Mantella, esto te dice dónde está:
+
+```bash
+python scripts/comprobar.py --buscar
+```
+
+Y si prefieres darle las rutas a mano, siguen valiendo `--skyrim` y `--config`.
 
 ## Uso diario
 

@@ -3,8 +3,27 @@
 Empieza siempre por el diagnóstico, con el gateway arrancado:
 
 ```bash
-python scripts/comprobar.py --skyrim "C:\...\Skyrim Special Edition" --config "C:\...\config.ini"
+python scripts/comprobar.py
 ```
+
+## No encuentro la carpeta de Mantella
+
+Mantella son **dos descargas** distintas en Nexus: el mod (que instala el
+gestor de mods dentro de Skyrim) y **Mantella Software**, un `.zip` aparte que
+descomprimes tú. El `config.ini` lo genera el segundo, la primera vez que lo
+arrancas; si solo instalaste el mod, esa carpeta todavía no existe.
+
+Dónde acaba el fichero depende de la versión: junto al ejecutable en las
+antiguas, y en `Documentos\My Games\Mantella` en las recientes, que además
+OneDrive puede haber movido dentro de `OneDrive\Documents`. Esto lo busca por ti:
+
+```bash
+python scripts/comprobar.py --buscar
+```
+
+Mira las unidades del equipo y enseña todas las rutas que encuentre, tanto de
+Skyrim como del `config.ini`. Si no sale ninguna, es que falta Mantella
+Software.
 
 ---
 

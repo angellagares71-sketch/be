@@ -156,7 +156,17 @@ puede crear el `.lnk`, deja un `.cmd` equivalente, que Windows lanza igual.
 
 ## 7. Apuntar Mantella al gateway
 
-Abre el `config.ini` de Mantella Software y cambia:
+El `config.ini` no está siempre en el mismo sitio: las versiones antiguas lo
+dejan junto al ejecutable (`C:\Mantella\MantellaSoftware\config.ini`) y las
+recientes en `Documentos\My Games\Mantella\config.ini` — y si tienes OneDrive,
+tu carpeta «Documentos» puede estar dentro de `OneDrive`. Para no buscarlo a
+mano:
+
+```bash
+python scripts/comprobar.py --buscar
+```
+
+Ábrelo y cambia:
 
 ```ini
 llm_api = http://localhost:8000/v1
@@ -177,6 +187,13 @@ carpetas reales. El resto de claves recomendadas están en
 ## 8. Comprobar la instalación
 
 Con el gateway arrancado:
+
+```bash
+python scripts/comprobar.py
+```
+
+Localiza Skyrim y el `config.ini` solo. Si quieres comprobar también el motor
+de voz, o corregir alguna ruta que haya adivinado mal:
 
 ```bash
 python scripts/comprobar.py ^
