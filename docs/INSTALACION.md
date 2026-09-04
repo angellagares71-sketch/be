@@ -133,6 +133,27 @@ INFO:     Uvicorn running on http://127.0.0.1:8000
 curl http://localhost:8000/health
 ```
 
+### Acceso directo en el Escritorio (opcional)
+
+Para no tener que abrir PowerShell cada vez:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1
+```
+
+Deja un **Skyrim IA** en tu Escritorio que arranca el gateway con doble clic.
+La ventana se queda abierta, que es justo lo que hace falta mientras juegas.
+
+| Opcion | Para que |
+|---|---|
+| `-Forzar` | Sobrescribe uno que ya exista |
+| `-Nombre "Otro"` | Cambia el nombre del acceso directo |
+| `-Destino "C:\ruta"` | Lo crea en otra carpeta en vez del Escritorio |
+
+Detecta el Escritorio real con `[Environment]::GetFolderPath("Desktop")`, asi
+que funciona aunque OneDrive lo haya movido. Si por politicas del sistema no
+puede crear el `.lnk`, deja un `.cmd` equivalente, que Windows lanza igual.
+
 ## 7. Apuntar Mantella al gateway
 
 Abre el `config.ini` de Mantella Software y cambia:

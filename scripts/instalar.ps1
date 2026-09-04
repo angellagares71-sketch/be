@@ -57,3 +57,6 @@ Write-Host ""
 Write-Host "Instalacion terminada." -ForegroundColor Green
 Write-Host "Siguiente paso: edita .env y pon tu clave de API en MANTELLA_API_KEY."
 Write-Host "Despues arranca el gateway con:  powershell -ExecutionPolicy Bypass -File scripts\arrancar.ps1"
+Write-Host ""
+Write-Host "Para tenerlo a mano, crea un acceso directo en el Escritorio con:"
+Write-Host "  powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1"

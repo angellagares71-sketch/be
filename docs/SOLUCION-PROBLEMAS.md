@@ -62,6 +62,20 @@ Algunas versiones exigen que el fichero exista aunque no vaya a usarlo. Créalo
 junto al `config.ini` con cualquier texto no vacío (`sk-local`). La clave de
 verdad la guarda el gateway en su `.env`.
 
+### El acceso directo del Escritorio no hace nada
+
+Abre PowerShell en la carpeta del repositorio y lanza `scripts\arrancar.ps1`
+a mano: el error que salga es el mismo que se traga la ventana al cerrarse.
+Lo habitual es que falte el entorno virtual (ejecuta `scripts\instalar.ps1`)
+o la clave en el `.env`.
+
+Si moviste la carpeta del repositorio despues de crear el acceso directo, las
+rutas que guarda ya no valen. Vuelve a generarlo:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1 -Forzar
+```
+
 ---
 
 ## Errores del proveedor

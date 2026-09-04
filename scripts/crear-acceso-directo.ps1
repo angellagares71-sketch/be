@@ -1,0 +1,110 @@
+<#
+.SYNOPSIS
+    Crea un acceso directo "Skyrim IA" en el Escritorio que arranca el gateway.
+
+.DESCRIPTION
+    Genera un .lnk que lanza scripts\arrancar.ps1 en una ventana de PowerShell
+    que se queda abierta, con el icono de assets\skyrim-ia.ico.
+
+    Si la creacion del .lnk falla (COM no disponible, politicas restrictivas),
+    cae a un .cmd equivalente, que Windows trata igual de bien como lanzador.
+
+.PARAMETER Nombre
+    Nombre del acceso directo. Por defecto "Skyrim IA".
+
+.PARAMETER Destino
+    Carpeta donde crearlo. Por defecto el Escritorio del usuario actual.
+
+.PARAMETER Forzar
+    Sobrescribe un acceso directo que ya exista con ese nombre.
+
+.EXAMPLE
+    powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1
+
+.EXAMPLE
+    powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1 -Forzar
+#>
+[CmdletBinding()]
+param(
+    [string]$Nombre = "Skyrim IA",
+    [string]$Destino,
+    [switch]$Forzar
+)
+
+$ErrorActionPreference = "Stop"
+
+$raiz = Split-Path -Parent $PSScriptRoot
+$arrancar = Join-Path $raiz "scripts\arrancar.ps1"
+$icono = Join-Path $raiz "assets\skyrim-ia.ico"
+
+if (-not (Test-Path $arrancar)) {
+    throw "No se encuentra $arrancar. Ejecuta este script desde el repositorio."
+}
+
+# El Escritorio real, que con OneDrive no siempre es %USERPROFILE%\Desktop.
+if (-not $Destino) {
+    $Destino = [Environment]::GetFolderPath("Desktop")
+}
+if (-not $Destino -or -not (Test-Path $Destino)) {
+    throw "No se encuentra la carpeta del Escritorio. Indica una con -Destino."
+}
+
+Write-Host "Creando el acceso directo '$Nombre'" -ForegroundColor Cyan
+Write-Host "  repositorio: $raiz"
+Write-Host "  escritorio : $Destino"
+
+$lnk = Join-Path $Destino "$Nombre.lnk"
+$cmd = Join-Path $Destino "$Nombre.cmd"
+
+foreach ($existente in @($lnk, $cmd)) {
+    if ((Test-Path $existente) -and -not $Forzar) {
+        throw "Ya existe '$existente'. Usa -Forzar para sobrescribirlo."
+    }
+}
+
+# PowerShell 5 (windows) sigue siendo el interprete mas seguro para el .lnk:
+# esta en todas las instalaciones de Windows.
+$interprete = "powershell.exe"
+if ($env:WINDIR) {
+    $candidato = Join-Path $env:WINDIR "System32\WindowsPowerShell\v1.0\powershell.exe"
+    if (Test-Path $candidato) { $interprete = $candidato }
+}
+$argumentos = "-ExecutionPolicy Bypass -NoExit -File `"$arrancar`""
+
+$creado = $null
+try {
+    $shell = New-Object -ComObject WScript.Shell
+    $atajo = $shell.CreateShortcut($lnk)
+    $atajo.TargetPath = $interprete
+    $atajo.Arguments = $argumentos
+    $atajo.WorkingDirectory = $raiz
+    $atajo.Description = "Arranca el gateway de Mantella para hablar con los PNJ de Skyrim"
+    if (Test-Path $icono) {
+        $atajo.IconLocation = "$icono,0"
+    }
+    $atajo.Save()
+    $creado = $lnk
+    if (Test-Path $cmd) { Remove-Item $cmd -Force }
+} catch {
+    Write-Warning "No se pudo crear el .lnk ($($_.Exception.Message)). Se creara un .cmd."
+    $contenido = @"
+@echo off
+rem Lanzador de Skyrim IA. Generado por scripts\crear-acceso-directo.ps1
+title Skyrim IA
+cd /d "$raiz"
+"$interprete" $argumentos
+"@
+    Set-Content -Path $cmd -Value $contenido -Encoding ASCII
+    $creado = $cmd
+}
+
+if (-not (Test-Path $creado)) {
+    throw "El acceso directo no llego a crearse en $Destino."
+}
+
+Write-Host ""
+Write-Host "Listo: $creado" -ForegroundColor Green
+Write-Host "Haz doble clic para arrancar el gateway. Deja la ventana abierta mientras juegas."
+if (-not (Test-Path (Join-Path $raiz ".env"))) {
+    Write-Warning "Aun no hay fichero .env. Ejecuta antes scripts\instalar.ps1 y pon tu clave de API."
+}

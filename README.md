@@ -41,6 +41,13 @@ notepad .env                                                   # pon tu clave
 powershell -ExecutionPolicy Bypass -File scripts\arrancar.ps1
 ```
 
+Para dejarlo a un doble clic, crea un acceso directo **Skyrim IA** en el
+Escritorio:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1
+```
+
 **Linux / macOS:**
 
 ```bash
@@ -84,6 +91,8 @@ gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
 | `server/tests/` | 56 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `scripts/arrancar.*` | Arranca el gateway |
+| `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
+| `assets/` | Icono del acceso directo y el script que lo genera |
 | `scripts/comprobar.py` | Diagnóstico de la instalación |
 | `config/gateway.env.ejemplo` | Todos los ajustes, comentados |
 | `config/mantella-config-fragmento.ini` | Las claves a cambiar en el `config.ini` de Mantella |
