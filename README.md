@@ -84,6 +84,22 @@ python scripts/comprobar.py --buscar
 
 Y si prefieres darle las rutas a mano, siguen valiendo `--skyrim` y `--config`.
 
+### Sin tocar la consola
+
+En Windows hay dos ficheros en la raíz del repositorio que hacen lo mismo con
+un **doble clic**, y dejan el resultado en un `.txt` al lado:
+
+| Doble clic en | Qué hace |
+|---|---|
+| `Buscar Mantella.bat` | Busca Skyrim y el `config.ini` y enseña las rutas |
+| `Comprobar instalacion.bat` | Diagnóstico completo |
+
+Solo necesitan Python instalado — no hace falta ni el entorno virtual ni
+descargar nada más, porque el diagnóstico usa únicamente la biblioteca
+estándar. Si no tienes `git`, puedes bajar el repositorio como ZIP desde
+GitHub (botón verde **Code** → **Download ZIP**), descomprimirlo y hacer doble
+clic igual.
+
 ## Uso diario
 
 1. Arranca el gateway (`scripts/arrancar`) y deja la ventana abierta.
@@ -101,7 +117,8 @@ Y si prefieres darle las rutas a mano, siguen valiendo `--skyrim` y `--config`.
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
 | `assets/` | Icono del acceso directo y el script que lo genera |
-| `scripts/comprobar.py` | Diagnóstico de la instalación |
+| `scripts/comprobar.py` | Diagnóstico de la instalación, localiza Skyrim y Mantella solo |
+| `*.bat` | Los mismos diagnósticos, a doble clic en Windows |
 | `config/gateway.env.ejemplo` | Todos los ajustes, comentados |
 | `config/mantella-config-fragmento.ini` | Las claves a cambiar en el `config.ini` de Mantella |
 | `docs/` | Instalación, configuración y solución de problemas |

@@ -1,3 +1,7 @@
+# Salida de los diagnosticos, propia de cada equipo
+resultado-busqueda.txt
+resultado-diagnostico.txt
+
 # Entorno y secretos
 .env
 .venv/
