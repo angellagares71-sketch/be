@@ -1,0 +1,107 @@
+name: Pruebas
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas:
+    name: pytest (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: server/requirements-dev.txt
+
+      - name: Instalar dependencias
+        working-directory: server
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Ejecutar las pruebas
+        working-directory: server
+        run: python -m pytest -q
+
+  scripts:
+    name: Sintaxis de los scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Comprobar los scripts de shell
+        run: |
+          for f in scripts/*.sh; do
+            echo "bash -n $f"
+            bash -n "$f"
+          done
+
+      - name: Comprobar los scripts de PowerShell
+        shell: pwsh
+        run: |
+          $errores = 0
+          foreach ($f in Get-ChildItem scripts/*.ps1) {
+            Write-Host "parse $($f.Name)"
+            $tokens = $null
+            $problemas = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $f.FullName, [ref]$tokens, [ref]$problemas) | Out-Null
+            if ($problemas -and $problemas.Count -gt 0) {
+              foreach ($p in $problemas) {
+                Write-Host "::error file=$($f.FullName)::$($p.Message)"
+              }
+              $errores += $problemas.Count
+            }
+          }
+          if ($errores -gt 0) {
+            Write-Host "$errores error(es) de sintaxis"
+            exit 1
+          }
+          Write-Host "PowerShell OK"
+
+      - name: Comprobar que el diagnostico compila y arranca
+        run: |
+          python -m compileall -q scripts/comprobar.py server/mantella_gateway
+          python scripts/comprobar.py --help > /dev/null
+
+      - name: Comprobar que los ficheros de configuracion son validos
+        run: |
+          python - <<'PY'
+          import configparser
+          p = configparser.ConfigParser(strict=False, interpolation=None)
+          p.read("config/mantella-config-fragmento.ini", encoding="utf-8")
+          assert p["LanguageModel"]["llm_api"], "falta llm_api en el fragmento de config.ini"
+
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, "server")
+          from mantella_gateway.config import load_dotenv
+          valores = load_dotenv("config/gateway.env.ejemplo", {})
+          assert "MANTELLA_PROVIDER" in valores, "el .env de ejemplo no define MANTELLA_PROVIDER"
+          print(f"config OK ({len(valores)} claves en el .env de ejemplo)")
+          PY
