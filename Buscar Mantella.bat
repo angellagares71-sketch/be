@@ -3,6 +3,22 @@ chcp 65001 >nul
 cd /d "%~dp0"
 title Buscar Mantella
 
+if exist "scripts\comprobar.py" goto :sitio_correcto
+echo.
+echo No encuentro los ficheros del programa en esta carpeta.
+echo.
+echo Casi siempre es por abrir el .bat dentro del ZIP, sin descomprimirlo.
+echo Windows deja abrirlo, pero luego no funciona.
+echo.
+echo Solucion: cierra esta ventana, busca el ZIP que descargaste, haz clic
+echo derecho encima, elige "Extraer todo", y abre el .bat desde la carpeta
+echo nueva que aparezca.
+echo.
+pause
+exit /b 1
+
+:sitio_correcto
+
 set "PY="
 if exist ".venv\Scripts\python.exe" set "PY=.venv\Scripts\python.exe"
 if defined PY goto :tengo_python
