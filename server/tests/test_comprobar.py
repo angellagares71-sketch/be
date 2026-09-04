@@ -147,3 +147,55 @@ def test_no_baja_mas_alla_del_limite_de_profundidad(disco: Path):
     _crear(hondo / "config.ini")
 
     assert comprobar.buscar_config_mantella(raices=[disco], documentos=[]) == []
+
+
+# --- lanzador (scripts/jugar.py) -----------------------------------------
+
+
+def _cargar_jugar():
+    spec = importlib.util.spec_from_file_location("jugar", RAIZ / "scripts" / "jugar.py")
+    modulo = importlib.util.module_from_spec(spec)
+    sys.modules["jugar"] = modulo
+    spec.loader.exec_module(modulo)
+    return modulo
+
+
+jugar = _cargar_jugar()
+
+
+@pytest.mark.parametrize(
+    "nombre",
+    ["skse64_loader.exe", "sksevr_loader.exe", "skse_loader.exe"],
+)
+def test_encuentra_el_lanzador_de_skse(tmp_path: Path, nombre: str):
+    _crear(tmp_path / nombre)
+
+    assert jugar.buscar_lanzador_skse(tmp_path) == tmp_path / nombre
+
+
+def test_prefiere_skse64_si_hay_varios(tmp_path: Path):
+    _crear(tmp_path / "skse_loader.exe")
+    _crear(tmp_path / "skse64_loader.exe")
+
+    assert jugar.buscar_lanzador_skse(tmp_path).name == "skse64_loader.exe"
+
+
+def test_sin_skse_no_hay_lanzador(tmp_path: Path):
+    _crear(tmp_path / "SkyrimSE.exe")
+
+    assert jugar.buscar_lanzador_skse(tmp_path) is None
+
+
+def test_encuentra_el_python_del_entorno(tmp_path: Path):
+    esperado = _crear(tmp_path / ".venv" / "bin" / "python")
+
+    assert jugar.python_del_entorno(tmp_path) == esperado
+
+
+def test_sin_entorno_virtual_devuelve_none(tmp_path: Path):
+    assert jugar.python_del_entorno(tmp_path) is None
+
+
+def test_gateway_caido_no_responde():
+    # Puerto cerrado: la comprobacion tiene que fallar sin lanzar excepcion.
+    assert jugar.gateway_responde("http://127.0.0.1:9", timeout=1) is False
