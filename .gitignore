@@ -1,0 +1,14 @@
+# Entorno y secretos
+.env
+.venv/
+GPT_SECRET_KEY.txt
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Sistema
+.DS_Store
+Thumbs.db
