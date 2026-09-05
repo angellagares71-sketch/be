@@ -204,6 +204,17 @@ def comprobar_skyrim(carpeta: Path | None) -> Path | None:
         marca(FALLO, "En esa carpeta no hay ningun ejecutable de Skyrim", str(carpeta))
         return None
 
+    # Mantella escribe dentro de la carpeta del juego, y Windows se lo impide
+    # en Program Files. Es la causa de fallos que aparecen mucho despues.
+    partes = {p.lower() for p in carpeta.parts}
+    if "program files" in partes or "program files (x86)" in partes:
+        marca(
+            FALLO,
+            "Skyrim esta dentro de Program Files",
+            "Mantella necesita escribir en esa carpeta y Windows no le deja. "
+            "Muevelo con Steam: Propiedades > Archivos instalados > Mover carpeta.",
+        )
+
     cargadores = sorted(p.name for p in carpeta.glob("skse*_loader.exe"))
     if cargadores:
         marca(OK, f"SKSE instalado ({', '.join(cargadores)})")

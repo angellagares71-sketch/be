@@ -125,7 +125,7 @@ Y el orden completo, si prefieres hacerlo paso a paso:
 | Ruta | Qué es |
 |---|---|
 | `server/mantella_gateway/` | El servidor: configuración, saneado de texto, cliente del proveedor y app HTTP |
-| `server/tests/` | 76 pruebas, sin salida a la red |
+| `server/tests/` | 79 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
@@ -147,5 +147,5 @@ Y el orden completo, si prefieres hacerlo paso a paso:
 
 ```bash
 cd server
-python -m pytest        # 76 pruebas, todas offline
+python -m pytest        # 79 pruebas, todas offline
 ```

@@ -199,3 +199,35 @@ def test_sin_entorno_virtual_devuelve_none(tmp_path: Path):
 def test_gateway_caido_no_responde():
     # Puerto cerrado: la comprobacion tiene que fallar sin lanzar excepcion.
     assert jugar.gateway_responde("http://127.0.0.1:9", timeout=1) is False
+
+
+# --- Skyrim en Program Files ----------------------------------------------
+
+
+def _estado_limpio():
+    for clave in comprobar._ESTADO:
+        comprobar._ESTADO[clave] = 0
+
+
+@pytest.mark.parametrize("carpeta_windows", ["Program Files", "Program Files (x86)"])
+def test_avisa_si_skyrim_esta_en_program_files(tmp_path: Path, capsys, carpeta_windows: str):
+    juego = tmp_path / carpeta_windows / "Steam" / "steamapps" / "common" / "Skyrim Special Edition"
+    _crear(juego / "SkyrimSE.exe")
+    _crear(juego / "skse64_loader.exe")
+    _estado_limpio()
+
+    comprobar.comprobar_skyrim(juego)
+
+    assert "Program Files" in capsys.readouterr().out
+    assert comprobar._ESTADO[comprobar.FALLO] == 1
+
+
+def test_no_avisa_si_skyrim_esta_fuera_de_program_files(tmp_path: Path):
+    juego = tmp_path / "Games" / "Steam" / "steamapps" / "common" / "Skyrim Special Edition"
+    _crear(juego / "SkyrimSE.exe")
+    _crear(juego / "skse64_loader.exe")
+    _estado_limpio()
+
+    comprobar.comprobar_skyrim(juego)
+
+    assert comprobar._ESTADO[comprobar.FALLO] == 0
