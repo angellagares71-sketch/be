@@ -93,6 +93,7 @@ un **doble clic**, y dejan el resultado en un `.txt` al lado:
 |---|---|
 | `Diagnostico.bat` | Diagnóstico completo, en **un solo fichero**: se descarga suelto y funciona sin descomprimir nada ni tener el resto del repositorio |
 | `Jugar.bat` | Arranca el gateway y el juego |
+| `Crear acceso directo.bat` | Deja el icono **Skyrim IA** en el Escritorio, que hace lo mismo que `Jugar.bat` |
 | `Buscar Mantella.bat` | Busca Skyrim y el `config.ini` y enseña las rutas |
 | `Comprobar instalacion.bat` | Diagnóstico completo |
 
@@ -129,7 +130,7 @@ Y el orden completo, si prefieres hacerlo paso a paso:
 | `server/tests/` | 82 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `scripts/arrancar.*` | Arranca el gateway |
-| `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
+| `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA»; arranca el juego, o solo el gateway con `-Que Gateway` |
 | `assets/` | Icono del acceso directo y el script que lo genera |
 | `scripts/comprobar.py` | Diagnóstico de la instalación, localiza Skyrim y Mantella solo |
 | `scripts/jugar.py` | Arranca el gateway, espera a que responda y lanza Skyrim con SKSE |

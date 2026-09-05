@@ -1,13 +1,20 @@
 <#
 .SYNOPSIS
-    Crea un acceso directo "Skyrim IA" en el Escritorio que arranca el gateway.
+    Crea un acceso directo "Skyrim IA" en el Escritorio.
 
 .DESCRIPTION
-    Genera un .lnk que lanza scripts\arrancar.ps1 en una ventana de PowerShell
-    que se queda abierta, con el icono de assets\skyrim-ia.ico.
+    Por defecto el acceso directo arranca la partida entera (Jugar.bat: levanta
+    el gateway, espera a que responda y lanza Skyrim con SKSE). Con
+    -Que Gateway crea el de antes, que solo levanta el gateway.
+
+    Genera un .lnk con el icono de assets\skyrim-ia.ico.
 
     Si la creacion del .lnk falla (COM no disponible, politicas restrictivas),
     cae a un .cmd equivalente, que Windows trata igual de bien como lanzador.
+
+.PARAMETER Que
+    Que arranca: "Juego" (por defecto) lanza el gateway y Skyrim; "Gateway"
+    lanza solo el gateway.
 
 .PARAMETER Nombre
     Nombre del acceso directo. Por defecto "Skyrim IA".
@@ -26,6 +33,8 @@
 #>
 [CmdletBinding()]
 param(
+    [ValidateSet("Juego", "Gateway")]
+    [string]$Que = "Juego",
     [string]$Nombre = "Skyrim IA",
     [string]$Destino,
     [switch]$Forzar
@@ -34,11 +43,18 @@ param(
 $ErrorActionPreference = "Stop"
 
 $raiz = Split-Path -Parent $PSScriptRoot
-$arrancar = Join-Path $raiz "scripts\arrancar.ps1"
 $icono = Join-Path $raiz "assets\skyrim-ia.ico"
 
-if (-not (Test-Path $arrancar)) {
-    throw "No se encuentra $arrancar. Ejecuta este script desde el repositorio."
+if ($Que -eq "Juego") {
+    $lanzar = Join-Path $raiz "Jugar.bat"
+    $descripcion = "Arranca el gateway y Skyrim con IA"
+} else {
+    $lanzar = Join-Path $raiz "scripts\arrancar.ps1"
+    $descripcion = "Arranca el gateway de Mantella para hablar con los PNJ de Skyrim"
+}
+
+if (-not (Test-Path $lanzar)) {
+    throw "No se encuentra $lanzar. Ejecuta este script desde el repositorio."
 }
 
 # El Escritorio real, que con OneDrive no siempre es %USERPROFILE%\Desktop.
@@ -69,16 +85,24 @@ if ($env:WINDIR) {
     $candidato = Join-Path $env:WINDIR "System32\WindowsPowerShell\v1.0\powershell.exe"
     if (Test-Path $candidato) { $interprete = $candidato }
 }
-$argumentos = "-ExecutionPolicy Bypass -NoExit -File `"$arrancar`""
+
+if ($Que -eq "Juego") {
+    # Un .bat se abre solo; no hace falta envolverlo en PowerShell.
+    $objetivo = $lanzar
+    $argumentos = ""
+} else {
+    $objetivo = $interprete
+    $argumentos = "-ExecutionPolicy Bypass -NoExit -File `"$lanzar`""
+}
 
 $creado = $null
 try {
     $shell = New-Object -ComObject WScript.Shell
     $atajo = $shell.CreateShortcut($lnk)
-    $atajo.TargetPath = $interprete
+    $atajo.TargetPath = $objetivo
     $atajo.Arguments = $argumentos
     $atajo.WorkingDirectory = $raiz
-    $atajo.Description = "Arranca el gateway de Mantella para hablar con los PNJ de Skyrim"
+    $atajo.Description = $descripcion
     if (Test-Path $icono) {
         $atajo.IconLocation = "$icono,0"
     }
@@ -92,7 +116,7 @@ try {
 rem Lanzador de Skyrim IA. Generado por scripts\crear-acceso-directo.ps1
 title Skyrim IA
 cd /d "$raiz"
-"$interprete" $argumentos
+"$objetivo" $argumentos
 "@
     Set-Content -Path $cmd -Value $contenido -Encoding ASCII
     $creado = $cmd
@@ -104,7 +128,11 @@ if (-not (Test-Path $creado)) {
 
 Write-Host ""
 Write-Host "Listo: $creado" -ForegroundColor Green
-Write-Host "Haz doble clic para arrancar el gateway. Deja la ventana abierta mientras juegas."
+if ($Que -eq "Juego") {
+    Write-Host "Haz doble clic para jugar: arranca el gateway y despues Skyrim."
+} else {
+    Write-Host "Haz doble clic para arrancar el gateway. Deja la ventana abierta mientras juegas."
+}
 if (-not (Test-Path (Join-Path $raiz ".env"))) {
     Write-Warning "Aun no hay fichero .env. Ejecuta antes scripts\instalar.ps1 y pon tu clave de API."
 }
