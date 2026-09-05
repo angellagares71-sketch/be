@@ -91,6 +91,7 @@ un **doble clic**, y dejan el resultado en un `.txt` al lado:
 
 | Doble clic en | Qué hace |
 |---|---|
+| `Diagnostico.bat` | Diagnóstico completo, en **un solo fichero**: se descarga suelto y funciona sin descomprimir nada ni tener el resto del repositorio |
 | `Jugar.bat` | Arranca el gateway y el juego |
 | `Buscar Mantella.bat` | Busca Skyrim y el `config.ini` y enseña las rutas |
 | `Comprobar instalacion.bat` | Diagnóstico completo |
@@ -125,13 +126,14 @@ Y el orden completo, si prefieres hacerlo paso a paso:
 | Ruta | Qué es |
 |---|---|
 | `server/mantella_gateway/` | El servidor: configuración, saneado de texto, cliente del proveedor y app HTTP |
-| `server/tests/` | 79 pruebas, sin salida a la red |
+| `server/tests/` | 82 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
 | `assets/` | Icono del acceso directo y el script que lo genera |
 | `scripts/comprobar.py` | Diagnóstico de la instalación, localiza Skyrim y Mantella solo |
 | `scripts/jugar.py` | Arranca el gateway, espera a que responda y lanza Skyrim con SKSE |
+| `scripts/generar-diagnostico-unico.py` | Regenera `Diagnostico.bat` tras tocar `comprobar.py` |
 | `*.bat` | Los mismos diagnósticos, a doble clic en Windows |
 | `config/gateway.env.ejemplo` | Todos los ajustes, comentados |
 | `config/mantella-config-fragmento.ini` | Las claves a cambiar en el `config.ini` de Mantella |
@@ -147,5 +149,5 @@ Y el orden completo, si prefieres hacerlo paso a paso:
 
 ```bash
 cd server
-python -m pytest        # 79 pruebas, todas offline
+python -m pytest        # 82 pruebas, todas offline
 ```

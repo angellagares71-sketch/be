@@ -231,3 +231,46 @@ def test_no_avisa_si_skyrim_esta_fuera_de_program_files(tmp_path: Path):
     comprobar.comprobar_skyrim(juego)
 
     assert comprobar._ESTADO[comprobar.FALLO] == 0
+
+
+# --- Diagnostico.bat, el fichero unico ------------------------------------
+
+
+def _cargar_generador():
+    spec = importlib.util.spec_from_file_location(
+        "generador", RAIZ / "scripts" / "generar-diagnostico-unico.py"
+    )
+    modulo = importlib.util.module_from_spec(spec)
+    sys.modules["generador"] = modulo
+    spec.loader.exec_module(modulo)
+    return modulo
+
+
+generador = _cargar_generador()
+
+
+def test_el_bat_de_un_fichero_esta_al_dia():
+    """Si cambia comprobar.py hay que regenerar el .bat que lo lleva dentro."""
+    esperado = generador.construir()
+    actual = (RAIZ / "Diagnostico.bat").read_bytes()
+
+    assert actual == esperado, (
+        "Diagnostico.bat no coincide con comprobar.py. "
+        "Ejecuta: python scripts/generar-diagnostico-unico.py"
+    )
+
+
+def test_la_marca_aparece_una_sola_vez():
+    # Si apareciese dos veces, PowerShell cortaria por la del propio comando.
+    contenido = (RAIZ / "Diagnostico.bat").read_bytes().decode("utf-8")
+
+    assert contenido.count(generador.MARCA) == 1
+
+
+def test_el_python_embebido_es_el_mismo_script():
+    contenido = (RAIZ / "Diagnostico.bat").read_bytes().decode("utf-8")
+    i = contenido.index(generador.MARCA)
+    embebido = contenido[i + len(generador.MARCA):].replace("\r\n", "\n")
+
+    original = (RAIZ / "scripts" / "comprobar.py").read_text(encoding="utf-8")
+    assert embebido.lstrip("\n") == original.lstrip("\n")
