@@ -33,6 +33,20 @@ Requisitos previos: Skyrim SE/AE/VR, SKSE, el mod Mantella ya instalado y
 Python 3.10 o superior. La guía completa está en
 [`docs/INSTALACION.md`](docs/INSTALACION.md).
 
+### Windows: un doble clic
+
+Haz doble clic en **`INSTALAR-SKYRIM-IA.cmd`**. Instala las dependencias, te
+pregunta por el proveedor y la clave, comprueba que responde, crea el acceso
+directo del Escritorio y te ofrece arrancar.
+
+Después solo queda una línea en el `config.ini` de Mantella:
+
+```ini
+llm_api = http://localhost:8000/v1
+```
+
+### Paso a paso, si lo prefieres
+
 **Windows** (PowerShell, en la carpeta del repositorio):
 
 ```powershell
@@ -90,6 +104,9 @@ gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
 | `server/mantella_gateway/` | El servidor: configuración, saneado de texto, cliente del proveedor y app HTTP |
 | `server/tests/` | 56 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
+| `INSTALAR-SKYRIM-IA.cmd` | Instalación completa de un doble clic (Windows) |
+| `scripts/configurar.ps1` | Pregunta proveedor y clave, y escribe el `.env` |
+| `scripts/probar-proveedor.py` | Manda una petición real para validar clave y modelo |
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
 | `assets/` | Icono del acceso directo y el script que lo genera |

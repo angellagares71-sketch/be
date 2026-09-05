@@ -1,0 +1,8 @@
+# Los ficheros de Windows necesitan CRLF: cmd.exe puede fallar con `goto`
+# si el fichero llega con finales de linea de Unix.
+*.cmd  text eol=crlf
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+
+# El icono es binario; que git no intente convertir nada.
+*.ico  binary
