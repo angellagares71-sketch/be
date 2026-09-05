@@ -1,0 +1,13 @@
+# Los ficheros de Windows necesitan CRLF en el disco: cmd.exe se atraganta con
+# un .bat en LF. Guardandolos en LF y convirtiendolos al sacarlos, salen bien
+# en cualquier sistema, tambien con core.autocrlf=true (lo normal en Windows).
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# Y estos tienen que quedarse en LF pase lo que pase.
+*.sh    text eol=lf
+*.py    text eol=lf
+
+# Binarios: que nadie los toque.
+*.ico   binary

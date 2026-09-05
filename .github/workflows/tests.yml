@@ -86,8 +86,9 @@ jobs:
 
       - name: Comprobar que el diagnostico compila y arranca
         run: |
-          python -m compileall -q scripts/comprobar.py server/mantella_gateway
+          python -m compileall -q scripts/ server/mantella_gateway
           python scripts/comprobar.py --help > /dev/null
+          python scripts/jugar.py --help > /dev/null
 
       - name: Comprobar que los ficheros de configuracion son validos
         run: |
