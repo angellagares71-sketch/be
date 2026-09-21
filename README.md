@@ -111,12 +111,14 @@ gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `INSTALAR-SKYRIM-IA.cmd` | Instalación completa de un doble clic (Windows) |
 | `CREAR-ACCESO-DIRECTO.cmd` | Vuelve a poner el acceso directo en el Escritorio, de un doble clic (Windows) |
+| `COMPROBAR-MICRO.cmd` | Diagnostica por qué el micrófono no funciona, de un doble clic (Windows) |
 | `scripts/configurar.ps1` | Pregunta proveedor y clave, y escribe el `.env` |
 | `scripts/probar-proveedor.py` | Manda una petición real para validar clave y modelo |
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
 | `assets/` | Icono del acceso directo y el script que lo genera |
 | `scripts/comprobar.py` | Diagnóstico de la instalación |
+| `scripts/comprobar-microfono.ps1` | Diagnóstico del micrófono: dispositivos, permisos de Windows y `config.ini` |
 | `config/gateway.env.ejemplo` | Todos los ajustes, comentados |
 | `config/mantella-config-fragmento.ini` | Las claves a cambiar en el `config.ini` de Mantella |
 | `docs/` | Instalación, configuración y solución de problemas |

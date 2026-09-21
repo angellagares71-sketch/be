@@ -145,6 +145,42 @@ tenga voces en español.
 - Baja `MANTELLA_MAX_TOKENS`: menos texto que generar y que sintetizar.
 - Sube `MANTELLA_TIMEOUT` a `120` si lo que ves son cortes por espera agotada.
 
+### El PNJ no me oye cuando hablo por el micrófono
+
+Primero, descarta lo obvio con el diagnóstico: doble clic en
+**`COMPROBAR-MICRO.cmd`**, o bien
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\comprobar-microfono.ps1 -Config "C:\ruta\a\config.ini"
+```
+
+Revisa los micrófonos que ve Windows, los dos permisos que hacen falta y los
+ajustes de micrófono del `config.ini`, y marca cada punto `[OK]`, `[AVISO]` o
+`[FALLO]`. No cambia nada: solo mira.
+
+Lo que suele fallar, por orden:
+
+- **El permiso de las aplicaciones de escritorio.** Es el más olvidado: aunque
+  el micrófono esté «activado», Windows tiene un segundo interruptor,
+  *Permitir que las aplicaciones de escritorio accedan al micrófono*. Mantella
+  no es una app de la Store, así que depende de ese. Configuración >
+  Privacidad > Micrófono.
+- **Windows usa otro micrófono.** Si tienes auriculares, webcam y el de la
+  torre, Mantella coge el que Windows tenga por defecto, que no siempre es el
+  que te has puesto. Configuración > Sistema > Sonido > Entrada.
+- **El micrófono está desactivado en el `config.ini`** de Mantella.
+- **El umbral de audio es demasiado alto.** Si tu `config.ini` tiene
+  `audio_threshold`, bájalo: con un valor alto, Mantella toma tu voz por
+  ruido de fondo y no la transcribe.
+
+Para saber si el fallo es del micrófono o de Mantella, usa el medidor de
+Windows: Configuración > Sistema > Sonido > Entrada > *Probar el micrófono*.
+Si la barra se mueve al hablar, el micrófono va bien y el problema está dentro
+de Mantella — mira su ventana mientras hablas, que ahí sale el mensaje.
+
+Esto es cosa de Mantella, no del gateway: el gateway solo recibe el texto que
+Mantella ya ha transcrito, y nunca toca el audio.
+
 ---
 
 ## Skyrim y el mod
