@@ -43,6 +43,14 @@ Si el acceso directo **Skyrim IA** no esta en tu Escritorio, o lo borraste sin
 querer, haz doble clic en **`CREAR-ACCESO-DIRECTO.cmd`**: lo vuelve a poner sin
 reinstalar nada.
 
+### Sin cuenta ni clave: la IA en tu propio PC
+
+Si no quieres registrarte en ningún sitio, haz doble clic en
+**`INSTALAR-IA-EN-MI-PC.cmd`**. Instala Ollama con `winget`, descarga el
+modelo y deja el `.env` configurado, sin que tengas que escribir nada. La
+primera vez baja unos 5 GB. Si `winget` no está disponible, te dice cómo
+instalar Ollama a mano y el resto lo sigue haciendo solo.
+
 Después solo queda una línea en el `config.ini` de Mantella:
 
 ```ini
@@ -112,7 +120,9 @@ gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
 | `INSTALAR-SKYRIM-IA.cmd` | Instalación completa de un doble clic (Windows) |
 | `CREAR-ACCESO-DIRECTO.cmd` | Vuelve a poner el acceso directo en el Escritorio, de un doble clic (Windows) |
 | `COMPROBAR-MICRO.cmd` | Diagnostica por qué el micrófono no funciona, de un doble clic (Windows) |
+| `INSTALAR-IA-EN-MI-PC.cmd` | Instala Ollama, el modelo y el `.env`, sin cuenta ni clave (Windows) |
 | `scripts/configurar.ps1` | Pregunta proveedor y clave, y escribe el `.env` |
+| `scripts/instalar-ollama.ps1` | Instala Ollama, descarga el modelo y escribe el `.env` |
 | `scripts/probar-proveedor.py` | Manda una petición real para validar clave y modelo |
 | `scripts/arrancar.*` | Arranca el gateway |
 | `scripts/crear-acceso-directo.ps1` | Crea el acceso directo «Skyrim IA» en el Escritorio |
