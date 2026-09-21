@@ -135,10 +135,11 @@ curl http://localhost:8000/health
 
 ### Acceso directo en el Escritorio (opcional)
 
-Para no tener que abrir PowerShell cada vez:
+Para no tener que abrir PowerShell cada vez, haz doble clic en
+**`CREAR-ACCESO-DIRECTO.cmd`**, en la carpeta del repositorio. Equivale a:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1
+powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1 -Forzar
 ```
 
 Deja un **Skyrim IA** en tu Escritorio que arranca el gateway con doble clic.

@@ -39,6 +39,10 @@ Haz doble clic en **`INSTALAR-SKYRIM-IA.cmd`**. Instala las dependencias, te
 pregunta por el proveedor y la clave, comprueba que responde, crea el acceso
 directo del Escritorio y te ofrece arrancar.
 
+Si el acceso directo **Skyrim IA** no esta en tu Escritorio, o lo borraste sin
+querer, haz doble clic en **`CREAR-ACCESO-DIRECTO.cmd`**: lo vuelve a poner sin
+reinstalar nada.
+
 Después solo queda una línea en el `config.ini` de Mantella:
 
 ```ini
@@ -56,7 +60,8 @@ powershell -ExecutionPolicy Bypass -File scripts\arrancar.ps1
 ```
 
 Para dejarlo a un doble clic, crea un acceso directo **Skyrim IA** en el
-Escritorio:
+Escritorio (o haz doble clic en `CREAR-ACCESO-DIRECTO.cmd`, que hace esto
+mismo):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\crear-acceso-directo.ps1
@@ -105,6 +110,7 @@ gateway, y marca cada punto como `[OK]`, `[AVISO]` o `[FALLO]`.
 | `server/tests/` | 56 pruebas, sin salida a la red |
 | `scripts/instalar.*` | Entorno virtual, dependencias y `.env` |
 | `INSTALAR-SKYRIM-IA.cmd` | Instalación completa de un doble clic (Windows) |
+| `CREAR-ACCESO-DIRECTO.cmd` | Vuelve a poner el acceso directo en el Escritorio, de un doble clic (Windows) |
 | `scripts/configurar.ps1` | Pregunta proveedor y clave, y escribe el `.env` |
 | `scripts/probar-proveedor.py` | Manda una petición real para validar clave y modelo |
 | `scripts/arrancar.*` | Arranca el gateway |
