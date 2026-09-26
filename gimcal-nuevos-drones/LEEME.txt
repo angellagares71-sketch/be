@@ -1,0 +1,35 @@
+GIMBAL CALIBRATION TOOL V3.6 - NUEVOS MODELOS
+=============================================
+
+Añade a la app: DJI Mini 3, Mini 3 Pro, Mini 4 Pro, Avata y DJI FPV.
+
+INSTALAR
+1. Cierra la app.
+2. Copia TODO el contenido de esta carpeta dentro de tu carpeta gimcal
+   (C:\Users\alaga\gimcal). No reemplaza nada: los scripts nuevos van
+   en la subcarpeta nuevos_drones y los .bat antiguos siguen igual.
+3. Si la app no trae pyserial, abre una consola y ejecuta:
+   py -m pip install pyserial
+
+USAR
+- Doble clic en calibrar_nuevos_drones.bat y elige el dron, o
+- Doble clic directo en mini3.bat, mini3pro.bat, mini4pro.bat,
+  avata.bat o fpv.bat.
+Los modelos antiguos (spark.bat, ma2mm.bat...) siguen igual.
+
+IMPORTANTE: LOS CINCO MODELOS SON EXPERIMENTALES
+- DJI no ha documentado cómo calibrar estos drones por USB.
+- La app usa la misma orden que el Spark / Mavic Mini. Está comprobado
+  que el gimbal del Mini 3 la recibe y se mueve
+  (github.com/o-gs/dji-firmware-tools/issues/483), pero su respuesta
+  tiene otro formato y no hay ningún informe de que la calibración
+  termine bien. En Mini 3 Pro, Mini 4 Pro, Avata y FPV no hay pruebas.
+- Por eso la app avisa antes de calibrar y, al final, dice
+  "UNCONFIRMED" (sin confirmar) en vez de "PASS" si el dron no manda
+  el aviso de fin conocido.
+- Después de calibrar, reinicia el dron y comprueba el horizonte en
+  DJI Fly. La calibración oficial de estos drones está en DJI Fly.
+- Cada calibración se guarda en calibracion_<MODELO>.log. Ese archivo
+  sirve para afinar el soporte de cada dron.
+
+Base: o-gs/dji-firmware-tools (GPLv3, ver nuevos_drones\LICENSE).
